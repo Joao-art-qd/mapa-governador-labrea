@@ -26,35 +26,35 @@
   const points = [
     {
       title: "1️⃣ Aeroporto Municipal",
-      coords: [-7.2648, -64.8000]
+      coords: [-7.282705, -64.772304]
     },
     {
       title: "2️⃣ Centro Dona Cesarina",
-      coords: [-7.2640, -64.7980]
+      coords: [-7.257511, -64.786804]
     },
     {
       title: "3️⃣ CASA Raimundo Domingos",
-      coords: [-7.2630, -64.7950]
+      coords: [-7.261377, -64.792240]
     },
     {
       title: "4️⃣ Defesa Civil",
-      coords: [-7.2620, -64.7930]
+      coords: [-7.262396, -64.799625]
     },
     {
       title: "5️⃣ CEM – Centro de Especialidades Médicas",
-      coords: [-7.2610, -64.7910]
+      coords: [-7.261830, -64.800291]
     },
     {
       title: "6️⃣ Corpo de Bombeiros",
-      coords: [-7.2600, -64.7890]
+      coords: [-7.262926, ,-64.796237]
     },
     {
       title: "7️⃣ Sede da Prefeitura",
-      coords: [-7.2590, -64.7870]
+      coords: [-7.265565, -64.796221]
     },
     {
       title: "8️⃣ CETI - Escola Estadual de Tempo Integral",
-      coords: [-7.2580, -64.7850]
+      coords: [-7.271356, -64.790865]
     }
   ];
 
