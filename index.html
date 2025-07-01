@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mapa com Roteamento</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 600px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>Mapa com Roteamento</h2>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <script>
+    var map = L.map('map').setView([-7.2620, -64.7930], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Pontos de exemplo
+    var route = L.Routing.control({
+      waypoints: [
+        L.latLng(-7.282705, -64.772304),
+        L.latLng(-7.257511, -64.786804),
+        L.latLng(-7.261377, -64.792240),
+        L.latLng(-7.262396, -64.799625)
+      ],
+      routeWhileDragging: false
+    }).addTo(map);
+  </script>
+</body>
+</html>
