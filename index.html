@@ -48,12 +48,21 @@
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Coordenadas dos pontos
+    // Lista com todos os pontos do percurso
     var pontos = [
       { lat: -7.282705, lng: -64.772304, titulo: "1º Ponto" },
-      { lat: -7.257511, lng: -64.786804, titulo: "2º Ponto" },
-      { lat: -7.261377, lng: -64.792240, titulo: "3º Ponto" },
-      { lat: -7.262396, lng: -64.799625, titulo: "4º Ponto" }
+      { lat: -7.271513, lng: -64.776005, titulo: "2º Ponto" },
+      { lat: -7.270982, lng: -64.777785, titulo: "3º Ponto" },
+      { lat: -7.268456, lng: -64.781277, titulo: "4º Ponto" },
+      { lat: -7.266763, lng: -64.783927, titulo: "5º Ponto" },
+      { lat: -7.263406, lng: -64.787692, titulo: "6º Ponto" },
+      { lat: -7.259884, lng: -64.790630, titulo: "7º Ponto" },
+      { lat: -7.257511, lng: -64.786804, titulo: "8º Ponto" },
+      { lat: -7.261377, lng: -64.792240, titulo: "9º Ponto" },
+      { lat: -7.261975, lng: -64.793019, titulo: "10º Ponto" },
+      { lat: -7.262292, lng: -64.795867, titulo: "11º Ponto" },
+      { lat: -7.262580, lng: -64.797732, titulo: "12º Ponto" },
+      { lat: -7.262396, lng: -64.799625, titulo: "13º Ponto" }
     ];
 
     // Adiciona marcadores numerados
@@ -71,7 +80,7 @@
       lineOptions: {
         styles: [{ color: '#2980b9', weight: 6 }]
       },
-      createMarker: function() { return null; } // Desativa os marcadores padrão da rota
+      createMarker: function() { return null; }
     }).addTo(map);
   </script>
 </body>
