@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mapa com Roteamento e Marcadores</title>
+  <title>Percurso Oficial – Governador Wilson Lima</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -35,7 +35,7 @@
   </style>
 </head>
 <body>
-  <h2>Roteiro da Chegada do Governador</h2>
+  <h2>📍 Percurso Oficial – Visita do Governador Wilson Lima | 📅 03 de julho de 2025</h2>
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -48,32 +48,63 @@
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Lista com todos os pontos do percurso
+    // Pontos com coordenadas e descrição real
     var pontos = [
-      { lat: -7.282705, lng: -64.772304, titulo: "1º Ponto" },
-      { lat: -7.271513, lng: -64.776005, titulo: "2º Ponto" },
-      { lat: -7.270982, lng: -64.777785, titulo: "3º Ponto" },
-      { lat: -7.268456, lng: -64.781277, titulo: "4º Ponto" },
-      { lat: -7.266763, lng: -64.783927, titulo: "5º Ponto" },
-      { lat: -7.263406, lng: -64.787692, titulo: "6º Ponto" },
-      { lat: -7.259884, lng: -64.790630, titulo: "7º Ponto" },
-      { lat: -7.257511, lng: -64.786804, titulo: "8º Ponto" },
-      { lat: -7.261377, lng: -64.792240, titulo: "9º Ponto" },
-      { lat: -7.261975, lng: -64.793019, titulo: "10º Ponto" },
-      { lat: -7.262292, lng: -64.795867, titulo: "11º Ponto" },
-      { lat: -7.262580, lng: -64.797732, titulo: "12º Ponto" },
-      { lat: -7.262396, lng: -64.799625, titulo: "13º Ponto" }
+      {
+        lat: -7.282705, lng: -64.772304,
+        titulo: "1️⃣ Inauguração do Aeroporto Municipal de Lábrea",
+        descricao: "📍 Local: Aeroporto Municipal\n➡️ Início do percurso: Estrada do Aeroporto → Av. Luiz Falcão → Av. Camilo Morato"
+      },
+      {
+        lat: -7.271513, lng: -64.776005,
+        titulo: "2️⃣ Inauguração do PAC Móvel e Entregas Oficiais",
+        descricao: "📍 Local: Centro Dona Cesarina\n➡️ Av. Camilo Morato → Rua Emílio Canizo → Rua 22 de Outubro"
+      },
+      {
+        lat: -7.266763, lng: -64.783927,
+        titulo: "3️⃣ Inauguração da Casa de Saúde Raimundo Domingos",
+        descricao: "📍 Local: Casa Raimundo Domingos\n➡️ Continuação pela Rua 22 de Outubro → Av. Coronel Luiz Gomes → Av. 14 de Maio"
+      },
+      {
+        lat: -7.263406, lng: -64.787692,
+        titulo: "4️⃣ Inauguração da Sede da Defesa Civil",
+        descricao: "📍 Local: Defesa Civil\n➡️ Av. 14 de Maio → Av. Getúlio Vargas"
+      },
+      {
+        lat: -7.257511, lng: -64.786804,
+        titulo: "5️⃣ Visita ao CEM – Centro de Especialidades Médicas",
+        descricao: "📍 Local: CEM\n➡️ Av. Getúlio Vargas → Av. Coronel Luiz Gomes → Rua Ville Roy → Travessa N. Sra. de Nazaré\n🎯 Inauguração da sala de saúde digital"
+      },
+      {
+        lat: -7.261377, lng: -64.792240,
+        titulo: "6️⃣ Inauguração da Unidade do Corpo de Bombeiros",
+        descricao: "📍 Local: Nova Sede dos Bombeiros\n➡️ Travessa Nossa Senhora de Nazaré\n*Fala das autoridades*"
+      },
+      {
+        lat: -7.262580, lng: -64.797732,
+        titulo: "7️⃣ Reinauguração da Prefeitura Municipal de Lábrea",
+        descricao: "📍 Local: Sede da Prefeitura\n➡️ Continuação pela Travessa N. Sra. de Nazaré → Rua 22 de Outubro"
+      },
+      {
+        lat: -7.262396, lng: -64.799625,
+        titulo: "8️⃣ Encerramento na Escola de Tempo Integral (CETI)",
+        descricao: "📍 Local: CETI\n🎁 Entregas: Cestas básicas, cadeiras de rodas, kits bebê\n✅ Encerramento oficial"
+      }
     ];
 
-    // Adiciona marcadores numerados
+    // Adiciona marcadores personalizados
     pontos.forEach(function(ponto, index) {
       L.marker([ponto.lat, ponto.lng])
         .addTo(map)
-        .bindPopup(ponto.titulo)
-        .bindTooltip((index + 1).toString(), { permanent: true, direction: 'top', className: 'marker-label' });
+        .bindPopup("<b>" + ponto.titulo + "</b><br>" + ponto.descricao.replace(/\n/g, "<br>"))
+        .bindTooltip((index + 1).toString(), {
+          permanent: true,
+          direction: 'top',
+          className: 'marker-label'
+        });
     });
 
-    // Traçado da rota
+    // Traçado da rota entre os pontos
     L.Routing.control({
       waypoints: pontos.map(p => L.latLng(p.lat, p.lng)),
       routeWhileDragging: false,
