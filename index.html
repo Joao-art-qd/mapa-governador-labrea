@@ -1,91 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Percurso - Visita Governador Wilson Lima</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    ol {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Percurso Oficial – Visita do Governador Wilson Lima</h2>
+<p><strong>Data:</strong> 03 de julho de 2025</p>
+
+<h3>Locais do Percurso:</h3>
+<ol>
+  <li>1️⃣ Aeroporto Municipal</li>
+  <li>2️⃣ Centro Dona Cesarina</li>
+  <li>3️⃣ CASA Raimundo Domingos</li>
+  <li>4️⃣ Defesa Civil</li>
+  <li>5️⃣ CEM – Centro de Especialidades Médicas</li>
+  <li>6️⃣ Corpo de Bombeiros</li>
+  <li>7️⃣ Sede da Prefeitura</li>
+  <li>8️⃣ CETI - Escola Estadual de Tempo Integral</li>
+</ol>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
-  window.onload = () => {
-    const icons = {
-      airport: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-      }),
-      hospital: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2967/2967350.png',
-        iconSize: [28, 28],
-        iconAnchor: [14, 28],
-        popupAnchor: [0, -28]
-      }),
-      prefeitura: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/9445/9445938.png',
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -30]
-      }),
-      default: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-        iconSize: [26, 26],
-        iconAnchor: [13, 26],
-        popupAnchor: [0, -26]
-      })
-    };
+  const points = [
+    [-7.282705, -64.772304], // Aeroporto Municipal
+    [-7.257511, -64.786804], // Centro Dona Cesarina
+    [-7.261377, -64.792240], // CASA Raimundo Domingos
+    [-7.262396, -64.799625], // Defesa Civil
+    [-7.261830, -64.800291], // CEM
+    [-7.262926, -64.796237], // Corpo de Bombeiros
+    [-7.265565, -64.796221], // Sede da Prefeitura
+    [-7.271356, -64.790865]  // CETI
+  ];
 
-    const points = [
-      {
-        title: "1️⃣ Inauguração do Aeroporto Municipal",
-        coords: [-7.282705, -64.772304],
-        icon: icons.airport
-      },
-      {
-        title: "2️⃣ PAC Móvel / Centro Dona Cesarina",
-        coords: [-7.257511, -64.786804],
-        icon: icons.default
-      },
-      {
-        title: "3️⃣ CASA Raimundo Domingos",
-        coords: [-7.261377, -64.792240],
-        icon: icons.default
-      },
-      {
-        title: "4️⃣ Defesa Civil",
-        coords: [-7.262396, -64.799625],
-        icon: icons.default
-      },
-      {
-        title: "5️⃣ CEM – Centro de Especialidades Médicas",
-        coords: [-7.261830, -64.800291],
-        icon: icons.hospital
-      },
-      {
-        title: "6️⃣ Corpo de Bombeiros",
-        coords: [-7.262926, -64.796237],
-        icon: icons.default
-      },
-      {
-        title: "7️⃣ Sede da Prefeitura",
-        coords: [-7.265565, -64.796221],
-        icon: icons.prefeitura
-      },
-      {
-        title: "8️⃣ CETI - Escola Estadual de Tempo Integral",
-        coords: [-7.271356, -64.790865],
-        icon: icons.default
-      }
-    ];
+  const map = L.map('map').setView([-7.2620, -64.7930], 14);
 
-    const map = L.map('map').setView([-7.2620, -64.7930], 15);
+  // Camada do OpenStreetMap — sem chave
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+  // Adiciona marcadores
+  points.forEach((coord, idx) => {
+    L.marker(coord).addTo(map).bindPopup(`Ponto ${idx + 1}`);
+  });
 
-    const latlngs = [];
+  // Desenha linha entre os pontos
+  L.polyline(points, { color: 'blue', weight: 4 }).addTo(map);
 
-    points.forEach((point) => {
-      L.marker(point.coords, { icon: point.icon })
-        .addTo(map)
-        .bindPopup(point.title);
-      latlngs.push(point.coords);
-    });
-
-    L.polyline(latlngs, { color: 'blue', weight: 5 }).addTo(map);
-  };
 </script>
+
+</body>
+</html>
