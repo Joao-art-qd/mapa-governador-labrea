@@ -1,118 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Percurso Oficial – Governador Wilson Lima</title>
+  <title>Percurso Oficial - Visita Governador Wilson Lima</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f2f2f2;
+      padding: 20px;
+      background-color: #f4f4f4;
     }
-
     h2 {
-      background-color: #2c3e50;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      margin: 0;
+      margin-top: 0;
+      color: #2c3e50;
     }
-
     #map {
-      height: 90vh;
-      width: 100%;
-    }
-
-    .leaflet-marker-icon {
-      border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      height: 600px;
+      border: 2px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <h2>📍 Percurso Oficial – Visita do Governador Wilson Lima | 📅 03 de julho de 2025</h2>
-  <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+<h2>📍 Percurso Oficial – Visita do Governador Wilson Lima</h2>
+<p><strong>📅 Data:</strong> 03 de julho de 2025</p>
 
-  <script>
-    var map = L.map('map').setView([-7.2620, -64.7930], 13);
+<div id="map"></div>
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const points = [
+    {
+      title: "1️⃣ Inauguração do Aeroporto Municipal",
+      coords: [-7.282705, -64.772304]
+    },
+    {
+      title: "2️⃣ PAC Móvel / Centro Dona Cesarina",
+      coords: [-7.257511, -64.786804]
+    },
+    {
+      title: "3️⃣ CASA Raimundo Domingos",
+      coords: [-7.261377, -64.792240]
+    },
+    {
+      title: "4️⃣ Defesa Civil",
+      coords: [-7.262396, -64.799625]
+    },
+    {
+      title: "5️⃣ CEM – Centro de Especialidades Médicas",
+      coords: [-7.261830, -64.800291]
+    },
+    {
+      title: "6️⃣ Corpo de Bombeiros",
+      coords: [-7.262926, -64.796237] // Corrigido (removido vírgula extra)
+    },
+    {
+      title: "7️⃣ Sede da Prefeitura",
+      coords: [-7.265565, -64.796221]
+    },
+    {
+      title: "8️⃣ CETI - Escola Estadual de Tempo Integral",
+      coords: [-7.271356, -64.790865]
+    }
+  ];
 
-    // Pontos com coordenadas e descrição real
-    var pontos = [
-      {
-        lat: -7.282705, lng: -64.772304,
-        titulo: "1️⃣ Inauguração do Aeroporto Municipal de Lábrea",
-        descricao: "📍 Local: Aeroporto Municipal\n➡️ Início do percurso: Estrada do Aeroporto → Av. Luiz Falcão → Av. Camilo Morato"
-      },
-      {
-        lat: -7.271513, lng: -64.776005,
-        titulo: "2️⃣ Inauguração do PAC Móvel e Entregas Oficiais",
-        descricao: "📍 Local: Centro Dona Cesarina\n➡️ Av. Camilo Morato → Rua Emílio Canizo → Rua 22 de Outubro"
-      },
-      {
-        lat: -7.266763, lng: -64.783927,
-        titulo: "3️⃣ Inauguração da Casa de Saúde Raimundo Domingos",
-        descricao: "📍 Local: Casa Raimundo Domingos\n➡️ Continuação pela Rua 22 de Outubro → Av. Coronel Luiz Gomes → Av. 14 de Maio"
-      },
-      {
-        lat: -7.263406, lng: -64.787692,
-        titulo: "4️⃣ Inauguração da Sede da Defesa Civil",
-        descricao: "📍 Local: Defesa Civil\n➡️ Av. 14 de Maio → Av. Getúlio Vargas"
-      },
-      {
-        lat: -7.257511, lng: -64.786804,
-        titulo: "5️⃣ Visita ao CEM – Centro de Especialidades Médicas",
-        descricao: "📍 Local: CEM\n➡️ Av. Getúlio Vargas → Av. Coronel Luiz Gomes → Rua Ville Roy → Travessa N. Sra. de Nazaré\n🎯 Inauguração da sala de saúde digital"
-      },
-      {
-        lat: -7.261377, lng: -64.792240,
-        titulo: "6️⃣ Inauguração da Unidade do Corpo de Bombeiros",
-        descricao: "📍 Local: Nova Sede dos Bombeiros\n➡️ Travessa Nossa Senhora de Nazaré\n*Fala das autoridades*"
-      },
-      {
-        lat: -7.262580, lng: -64.797732,
-        titulo: "7️⃣ Reinauguração da Prefeitura Municipal de Lábrea",
-        descricao: "📍 Local: Sede da Prefeitura\n➡️ Continuação pela Travessa N. Sra. de Nazaré → Rua 22 de Outubro"
-      },
-      {
-        lat: -7.262396, lng: -64.799625,
-        titulo: "8️⃣ Encerramento na Escola de Tempo Integral (CETI)",
-        descricao: "📍 Local: CETI\n🎁 Entregas: Cestas básicas, cadeiras de rodas, kits bebê\n✅ Encerramento oficial"
-      }
-    ];
+  const map = L.map('map').setView([-7.2620, -64.7930], 15);
 
-    // Adiciona marcadores personalizados
-    pontos.forEach(function(ponto, index) {
-      L.marker([ponto.lat, ponto.lng])
-        .addTo(map)
-        .bindPopup("<b>" + ponto.titulo + "</b><br>" + ponto.descricao.replace(/\n/g, "<br>"))
-        .bindTooltip((index + 1).toString(), {
-          permanent: true,
-          direction: 'top',
-          className: 'marker-label'
-        });
-    });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-    // Traçado da rota entre os pontos
-    L.Routing.control({
-      waypoints: pontos.map(p => L.latLng(p.lat, p.lng)),
-      routeWhileDragging: false,
-      lineOptions: {
-        styles: [{ color: '#2980b9', weight: 6 }]
-      },
-      createMarker: function() { return null; }
-    }).addTo(map);
-  </script>
+  const latlngs = [];
+
+  points.forEach((point) => {
+    L.marker(point.coords)
+      .addTo(map)
+      .bindPopup(point.title);
+    latlngs.push(point.coords);
+  });
+
+  L.polyline(latlngs, {color: 'blue', weight: 5}).addTo(map);
+</script>
+
 </body>
 </html>
