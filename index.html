@@ -1,19 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mapa com Roteamento</title>
+  <title>Mapa com Roteamento e Marcadores</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
   <style>
-    #map { height: 600px; width: 100%; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+
+    h2 {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin: 0;
+    }
+
+    #map {
+      height: 90vh;
+      width: 100%;
+    }
+
+    .leaflet-marker-icon {
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
   </style>
 </head>
 <body>
-  <h2>Mapa com Roteamento</h2>
+  <h2>Roteiro da Chegada do Governador</h2>
   <div id="map"></div>
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
   <script>
     var map = L.map('map').setView([-7.2620, -64.7930], 13);
 
@@ -21,15 +48,30 @@
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Pontos de exemplo
-    var route = L.Routing.control({
-      waypoints: [
-        L.latLng(-7.282705, -64.772304),
-        L.latLng(-7.257511, -64.786804),
-        L.latLng(-7.261377, -64.792240),
-        L.latLng(-7.262396, -64.799625)
-      ],
-      routeWhileDragging: false
+    // Coordenadas dos pontos
+    var pontos = [
+      { lat: -7.282705, lng: -64.772304, titulo: "1º Ponto" },
+      { lat: -7.257511, lng: -64.786804, titulo: "2º Ponto" },
+      { lat: -7.261377, lng: -64.792240, titulo: "3º Ponto" },
+      { lat: -7.262396, lng: -64.799625, titulo: "4º Ponto" }
+    ];
+
+    // Adiciona marcadores numerados
+    pontos.forEach(function(ponto, index) {
+      L.marker([ponto.lat, ponto.lng])
+        .addTo(map)
+        .bindPopup(ponto.titulo)
+        .bindTooltip((index + 1).toString(), { permanent: true, direction: 'top', className: 'marker-label' });
+    });
+
+    // Traçado da rota
+    L.Routing.control({
+      waypoints: pontos.map(p => L.latLng(p.lat, p.lng)),
+      routeWhileDragging: false,
+      lineOptions: {
+        styles: [{ color: '#2980b9', weight: 6 }]
+      },
+      createMarker: function() { return null; } // Desativa os marcadores padrão da rota
     }).addTo(map);
   </script>
 </body>
