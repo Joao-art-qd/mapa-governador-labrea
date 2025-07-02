@@ -1,141 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Percurso - Visita Governador</title>
   <meta charset="utf-8" />
-  <title>Rota 3D com Carro Animado</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
   <style>
-    body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
-    .car-marker {
-      width: 30px;
-      height: 30px;
-      background-image: url('https://cdn-icons-png.flaticon.com/512/744/744465.png'); /* ícone de carro */
-      background-size: cover;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #map {
+      flex: 2;
+      height: 100%;
+    }
+
+    .lista {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 30px;
+      overflow-y: auto;
+      border-left: 4px solid #007bff;
+    }
+
+    .lista h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+
+    .lista ol {
+      font-size: 24px;
+      line-height: 1.6;
+      padding-left: 20px;
+    }
+
+    .lista li {
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      #map, .lista {
+        height: 50vh;
+        width: 100%;
+      }
+    }
+
+    .leaflet-control-layers {
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-<div id="map"></div>
-<script>
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NmZjazA2emYycXBndHRqcmZ3N3gifQ.2S8-9SJiEZPLmfdgYy3FZQ';
+  <div class="container">
+    <div id="map"></div>
+    <div class="lista">
+      <h2>Pontos da Visita</h2>
+      <ol>
+        <li>1️⃣ Reinauguração Aeroporto</li>
+        <li>2️⃣ Parada no Hospital (Gerador)</li>
+        <li>3️⃣ CETI - Entregas (ESTADO)</li>
+        <li>4️⃣ Reinauguração Casa Raimundo Domingos</li>
+        <li>5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)</li>
+        <li>6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA</li>
+        <li>7️⃣ Inauguração Defesa Civil</li>
+        <li>8️⃣ Inauguração Corpo de Bombeiros</li>
+      </ol>
+    </div>
+  </div>
 
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/satellite-streets-v12',
-  center: [-64.793, -7.262],
-  zoom: 13,
-  pitch: 60,
-  bearing: -20,
-  antialias: true
-});
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <script>
+    const pontos = [
+      { title: "1️⃣ Reinauguração Aeroporto", coords: [-7.282705, -64.772304] },
+      { title: "2️⃣ Parada no Hospital (Gerador)", coords: [-7.269101, -64.789807] },
+      { title: "3️⃣ CETI - Entregas (ESTADO)", coords: [-7.271356, -64.790865] },
+      { title: "4️⃣ Reinauguração Casa Raimundo Domingos", coords: [-7.261377, -64.792240] },
+      { title: "5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)", coords: [-7.257511, -64.786804] },
+      { title: "6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA", coords: [-7.261830, -64.800291] },
+      { title: "7️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
+      { title: "8️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
+    ];
 
-map.on('load', () => {
-  const coordinates = [
-    [-64.772304, -7.282705],
-    [-64.789807, -7.269101],
-    [-64.790865, -7.271356],
-    [-64.792240, -7.261377],
-    [-64.786804, -7.257511],
-    [-64.800291, -7.261830],
-    [-64.799625, -7.262396],
-    [-64.796237, -7.262926]
-  ];
+    const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
 
-  const route = {
-    type: 'Feature',
-    geometry: {
-      type: 'LineString',
-      coordinates: coordinates
-    }
-  };
+    const mapaBase = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(mapa);
 
-  map.addSource('route', {
-    type: 'geojson',
-    data: route
-  });
+    const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics',
+      maxZoom: 19
+    });
 
-  map.addLayer({
-    id: 'route-line',
-    type: 'line',
-    source: 'route',
-    layout: {
-      'line-join': 'round',
-      'line-cap': 'round'
-    },
-    paint: {
-      'line-color': '#ff0000',
-      'line-width': 6
-    }
-  });
+    const camadasBase = {
+      "🗺️ Mapa": mapaBase,
+      "🛰️ Satélite": satelite
+    };
 
-  // Adiciona prédios 3D
-  map.addLayer({
-    id: '3d-buildings',
-    source: 'composite',
-    'source-layer': 'building',
-    filter: ['==', 'extrude', 'true'],
-    type: 'fill-extrusion',
-    minzoom: 15,
-    paint: {
-      'fill-extrusion-color': '#aaa',
-      'fill-extrusion-height': ['get', 'height'],
-      'fill-extrusion-base': ['get', 'min_height'],
-      'fill-extrusion-opacity': 0.6
-    }
-  });
+    L.control.layers(camadasBase).addTo(mapa);
 
-  // Criar marcador de carro com ícone personalizado
-  const el = document.createElement('div');
-  el.className = 'car-marker';
-  const marker = new mapboxgl.Marker(el).setLngLat(coordinates[0]).addTo(map);
+    pontos.forEach((p, index) => {
+      const numero = index + 1;
+      const cor = numero === 1 ? 'red' : 'blue';
 
-  // Criar "rastro" da rota em tempo real
-  const trail = {
-    type: 'Feature',
-    geometry: {
-      type: 'LineString',
-      coordinates: []
-    }
-  };
+      const iconNumerado = L.divIcon({
+        html: `<div style="background-color:${cor};color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid #fff;">${numero}</div>`,
+        iconSize: [30, 30],
+        className: ''
+      });
 
-  map.addSource('trail', {
-    type: 'geojson',
-    data: trail
-  });
+      L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
+    });
 
-  map.addLayer({
-    id: 'trail-line',
-    type: 'line',
-    source: 'trail',
-    paint: {
-      'line-color': '#00ffff',
-      'line-width': 4,
-      'line-opacity': 0.6,
-      'line-dasharray': [2, 4]
-    }
-  });
+    const waypoints = pontos.map(p => L.latLng(p.coords[0], p.coords[1]));
+    console.log("Coordenadas dos pontos da rota:", waypoints);
 
-  let i = 0;
-  function animate() {
-    marker.setLngLat(coordinates[i]);
-    trail.geometry.coordinates.push(coordinates[i]);
-    map.getSource('trail').setData(trail);
-
-    i++;
-    if (i >= coordinates.length) {
-      i = 0;
-      trail.geometry.coordinates = [];
-      setTimeout(animate, 1000); // pausa antes de reiniciar
-    } else {
-      setTimeout(animate, 300); // velocidade do carro
-    }
-  }
-
-  animate();
-});
-</script>
+    L.Routing.control({
+      waypoints: waypoints,
+      lineOptions: {
+        styles: [{ color: 'red', weight: 4 }]
+      },
+      routeWhileDragging: false,
+      addWaypoints: false,
+      draggableWaypoints: false,
+      createMarker: function () { return null; },
+      show: false
+    }).addTo(mapa);
+  </script>
 </body>
 </html>
