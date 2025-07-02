@@ -120,7 +120,6 @@
 
     L.control.layers(camadasBase).addTo(mapa);
 
-    // Adiciona marcadores numerados
     pontos.forEach((p, index) => {
       const numero = index + 1;
       const cor = numero === 1 ? 'red' : 'blue';
@@ -134,11 +133,10 @@
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
     });
 
-    // Traçado da rota sem painel de instruções
     L.Routing.control({
       waypoints: pontos.map(p => L.latLng(p.coords[0], p.coords[1])),
       lineOptions: {
-        styles: [{ color: '#007bff', weight: 4 }]
+        styles: [{ color: 'red', weight: 4 }]
       },
       routeWhileDragging: false,
       addWaypoints: false,
@@ -146,7 +144,6 @@
       createMarker: function() { return null; },
       show: false
     }).addTo(mapa);
-
   </script>
 </body>
 </html>
