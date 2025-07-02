@@ -5,7 +5,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
   <style>
     * {
       box-sizing: border-box;
@@ -89,7 +88,6 @@
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
   <script>
     const pontos = [
       { title: "1️⃣ Reinauguração Aeroporto", coords: [-7.282705, -64.772304] },
@@ -132,21 +130,6 @@
 
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
     });
-
-    const waypoints = pontos.map(p => L.latLng(p.coords[0], p.coords[1]));
-    console.log("Coordenadas dos pontos da rota:", waypoints);
-
-    L.Routing.control({
-      waypoints: waypoints,
-      lineOptions: {
-        styles: [{ color: 'red', weight: 4 }]
-      },
-      routeWhileDragging: false,
-      addWaypoints: false,
-      draggableWaypoints: false,
-      createMarker: function () { return null; },
-      show: false
-    }).addTo(mapa);
   </script>
 </body>
 </html>
