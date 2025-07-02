@@ -2,13 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Rota 3D - Visita Governador</title>
+  <title>Rota 3D com Carro Animado</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
   <style>
     body { margin: 0; padding: 0; }
     #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    .car-marker {
+      width: 30px;
+      height: 30px;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/744/744465.png'); /* ícone de carro */
+      background-size: cover;
+    }
   </style>
 </head>
 <body>
@@ -27,20 +33,22 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', () => {
+  const coordinates = [
+    [-64.772304, -7.282705],
+    [-64.789807, -7.269101],
+    [-64.790865, -7.271356],
+    [-64.792240, -7.261377],
+    [-64.786804, -7.257511],
+    [-64.800291, -7.261830],
+    [-64.799625, -7.262396],
+    [-64.796237, -7.262926]
+  ];
+
   const route = {
     type: 'Feature',
     geometry: {
       type: 'LineString',
-      coordinates: [
-        [-64.772304, -7.282705],
-        [-64.789807, -7.269101],
-        [-64.790865, -7.271356],
-        [-64.792240, -7.261377],
-        [-64.786804, -7.257511],
-        [-64.800291, -7.261830],
-        [-64.799625, -7.262396],
-        [-64.796237, -7.262926]
-      ]
+      coordinates: coordinates
     }
   };
 
@@ -50,7 +58,7 @@ map.on('load', () => {
   });
 
   map.addLayer({
-    id: 'route',
+    id: 'route-line',
     type: 'line',
     source: 'route',
     layout: {
@@ -79,18 +87,54 @@ map.on('load', () => {
     }
   });
 
-  // Animação do marcador
-  const coords = route.geometry.coordinates;
-  const marker = new mapboxgl.Marker({ color: "blue" }).setLngLat(coords[0]).addTo(map);
-  let i = 0;
+  // Criar marcador de carro com ícone personalizado
+  const el = document.createElement('div');
+  el.className = 'car-marker';
+  const marker = new mapboxgl.Marker(el).setLngLat(coordinates[0]).addTo(map);
 
-  function animateMarker() {
-    marker.setLngLat(coords[i]);
-    i = (i + 1) % coords.length;
-    requestAnimationFrame(animateMarker);
+  // Criar "rastro" da rota em tempo real
+  const trail = {
+    type: 'Feature',
+    geometry: {
+      type: 'LineString',
+      coordinates: []
+    }
+  };
+
+  map.addSource('trail', {
+    type: 'geojson',
+    data: trail
+  });
+
+  map.addLayer({
+    id: 'trail-line',
+    type: 'line',
+    source: 'trail',
+    paint: {
+      'line-color': '#00ffff',
+      'line-width': 4,
+      'line-opacity': 0.6,
+      'line-dasharray': [2, 4]
+    }
+  });
+
+  let i = 0;
+  function animate() {
+    marker.setLngLat(coordinates[i]);
+    trail.geometry.coordinates.push(coordinates[i]);
+    map.getSource('trail').setData(trail);
+
+    i++;
+    if (i >= coordinates.length) {
+      i = 0;
+      trail.geometry.coordinates = [];
+      setTimeout(animate, 1000); // pausa antes de reiniciar
+    } else {
+      setTimeout(animate, 300); // velocidade do carro
+    }
   }
 
-  animateMarker();
+  animate();
 });
 </script>
 </body>
