@@ -1,34 +1,58 @@
-<script>
-  const iconPadrao = L.icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [0, -41]
-  });
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mapa - Percurso Governador</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 100vh; /* Altura total da tela */
+      width: 100%;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
 
-  const pontos = [
-    { title: "1️⃣ Aeroporto Municipal", coords: [-7.282705, -64.772304] },
-    { title: "2️⃣ Centro Dona Cesarina", coords: [-7.257511, -64.786804] },
-    { title: "3️⃣ CASA Raimundo Domingos", coords: [-7.261377, -64.792240] },
-    { title: "4️⃣ Defesa Civil", coords: [-7.262396, -64.799625] },
-    { title: "5️⃣ CEM", coords: [-7.261830, -64.800291] },
-    { title: "6️⃣ Corpo de Bombeiros", coords: [-7.262926, -64.796237] },
-    { title: "7️⃣ Prefeitura", coords: [-7.265565, -64.796221] },
-    { title: "8️⃣ CETI", coords: [-7.271356, -64.790865] }
-  ];
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const iconPadrao = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [0, -41]
+    });
 
-  const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
+    const pontos = [
+      { title: "1️⃣ Aeroporto Municipal", coords: [-7.282705, -64.772304] },
+      { title: "2️⃣ Centro Dona Cesarina", coords: [-7.257511, -64.786804] },
+      { title: "3️⃣ CASA Raimundo Domingos", coords: [-7.261377, -64.792240] },
+      { title: "4️⃣ Defesa Civil", coords: [-7.262396, -64.799625] },
+      { title: "5️⃣ CEM", coords: [-7.261830, -64.800291] },
+      { title: "6️⃣ Corpo de Bombeiros", coords: [-7.262926, -64.796237] },
+      { title: "7️⃣ Prefeitura", coords: [-7.265565, -64.796221] },
+      { title: "8️⃣ CETI", coords: [-7.271356, -64.790865] }
+    ];
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(mapa);
+    const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
 
-  const latlngs = [];
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(mapa);
 
-  pontos.forEach(p => {
-    L.marker(p.coords, { icon: iconPadrao }).addTo(mapa).bindPopup(p.title);
-    latlngs.push(p.coords);
-  });
+    const latlngs = [];
 
-  L.polyline(latlngs, { color: 'blue' }).addTo(mapa);
-</script>
+    pontos.forEach(p => {
+      L.marker(p.coords, { icon: iconPadrao }).addTo(mapa).bindPopup(p.title);
+      latlngs.push(p.coords);
+    });
+
+    L.polyline(latlngs, { color: 'blue' }).addTo(mapa);
+  </script>
+</body>
+</html>
