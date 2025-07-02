@@ -1,81 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Percurso - Visita Governador (Loop Lento)</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <title>Rota 3D - Visita Governador</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
   <style>
-    html, body, #map { height: 100%; margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
   </style>
 </head>
 <body>
-  <div id="map"></div>
+<div id="map"></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NmZjazA2emYycXBndHRqcmZ3N3gifQ.2S8-9SJiEZPLmfdgYy3FZQ';
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: [-64.793, -7.262],
+  zoom: 13,
+  pitch: 60,
+  bearing: -20,
+  antialias: true
+});
 
-  <script>
-    const pontos = [
-      { title: "1️⃣ Reinauguração Aeroporto", coords: [-7.282705, -64.772304] },
-      { title: "2️⃣ Parada no Hospital (Gerador)", coords: [-7.269101, -64.789807] },
-      { title: "3️⃣ CETI - Entregas (ESTADO)", coords: [-7.271356, -64.790865] },
-      { title: "4️⃣ Reinauguração Casa Raimundo Domingos", coords: [-7.261377, -64.792240] },
-      { title: "5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)", coords: [-7.257511, -64.786804] },
-      { title: "6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA", coords: [-7.261830, -64.800291] },
-      { title: "7️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
-      { title: "8️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
-    ];
+map.on('load', () => {
+  const route = {
+    type: 'Feature',
+    geometry: {
+      type: 'LineString',
+      coordinates: [
+        [-64.772304, -7.282705],
+        [-64.789807, -7.269101],
+        [-64.790865, -7.271356],
+        [-64.792240, -7.261377],
+        [-64.786804, -7.257511],
+        [-64.800291, -7.261830],
+        [-64.799625, -7.262396],
+        [-64.796237, -7.262926]
+      ]
+    }
+  };
 
-    const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
+  map.addSource('route', {
+    type: 'geojson',
+    data: route
+  });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(mapa);
+  map.addLayer({
+    id: 'route',
+    type: 'line',
+    source: 'route',
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round'
+    },
+    paint: {
+      'line-color': '#ff0000',
+      'line-width': 6
+    }
+  });
 
-    pontos.forEach((p, index) => {
-      const iconNumerado = L.divIcon({
-        html: `<div style="background-color:${index === 0 ? 'red' : 'blue'};color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid #fff;">${index + 1}</div>`,
-        iconSize: [30, 30],
-        className: ''
-      });
+  // Adiciona prédios 3D
+  map.addLayer({
+    id: '3d-buildings',
+    source: 'composite',
+    'source-layer': 'building',
+    filter: ['==', 'extrude', 'true'],
+    type: 'fill-extrusion',
+    minzoom: 15,
+    paint: {
+      'fill-extrusion-color': '#aaa',
+      'fill-extrusion-height': ['get', 'height'],
+      'fill-extrusion-base': ['get', 'min_height'],
+      'fill-extrusion-opacity': 0.6
+    }
+  });
 
-      L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
-    });
+  // Animação do marcador
+  const coords = route.geometry.coordinates;
+  const marker = new mapboxgl.Marker({ color: "blue" }).setLngLat(coords[0]).addTo(map);
+  let i = 0;
 
-    const waypoints = pontos.map(p => L.latLng(p.coords[0], p.coords[1]));
+  function animateMarker() {
+    marker.setLngLat(coords[i]);
+    i = (i + 1) % coords.length;
+    requestAnimationFrame(animateMarker);
+  }
 
-    const rota = L.Routing.control({
-      waypoints: waypoints,
-      lineOptions: {
-        styles: [{ color: 'red', weight: 4 }]
-      },
-      routeWhileDragging: false,
-      addWaypoints: false,
-      draggableWaypoints: false,
-      createMarker: () => null,
-      show: false
-    }).addTo(mapa);
-
-    rota.on('routesfound', function(e) {
-      const coords = e.routes[0].coordinates;
-      const marcador = L.marker(coords[0]).addTo(mapa);
-      let i = 0;
-
-      function animarLoop() {
-        marcador.setLatLng(coords[i]);
-        i++;
-        if (i < coords.length) {
-          setTimeout(animarLoop, 140); // ← velocidade ajustada aqui
-        } else {
-          i = 0;
-          setTimeout(animarLoop, 800); // pausa antes de reiniciar
-        }
-      }
-
-      animarLoop();
-    });
-  </script>
+  animateMarker();
+});
+</script>
 </body>
 </html>
