@@ -82,7 +82,8 @@
         <li>4️⃣ Reinauguração Casa Raimundo Domingos</li>
         <li>5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)</li>
         <li>6️⃣ Inauguração Defesa Civil</li>
-        <li>7️⃣ Inauguração Corpo de Bombeiros</li>
+        <li>7️⃣ CEM</li>
+        <li>8️⃣ Inauguração Corpo de Bombeiros</li>
       </ol>
     </div>
   </div>
@@ -97,7 +98,8 @@
       { title: "4️⃣ Reinauguração Casa Raimundo Domingos", coords: [-7.261377, -64.792240] },
       { title: "5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)", coords: [-7.257511, -64.786804] },
       { title: "6️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
-      { title: "7️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
+      { title: "7️⃣ CEM", coords: [-7.261830, -64.800291] },
+      { title: "8️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
     ];
 
     const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
@@ -118,7 +120,7 @@
 
     L.control.layers(camadasBase).addTo(mapa);
 
-    // Adiciona marcadores personalizados
+    // Adiciona marcadores numerados
     pontos.forEach((p, index) => {
       const numero = index + 1;
       const cor = numero === 1 ? 'red' : 'blue';
@@ -132,7 +134,7 @@
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
     });
 
-    // Cria a rota sem painel de instruções
+    // Traçado da rota sem painel de instruções
     L.Routing.control({
       waypoints: pontos.map(p => L.latLng(p.coords[0], p.coords[1])),
       lineOptions: {
@@ -142,7 +144,7 @@
       addWaypoints: false,
       draggableWaypoints: false,
       createMarker: function() { return null; },
-      show: false // 👈 Remove painel de instruções
+      show: false
     }).addTo(mapa);
 
   </script>
