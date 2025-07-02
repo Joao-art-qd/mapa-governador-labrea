@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
   <style>
     * {
       box-sizing: border-box;
@@ -75,58 +76,49 @@
     <div class="lista">
       <h2>Pontos da Visita</h2>
       <ol>
-        <li>1️⃣ Aeroporto Municipal</li>
-        <li>2️⃣ PAC-MOVEL Centro Dona Cesarina</li>
-        <li>3️⃣ CASA Raimundo Domingos</li>
-        <li>4️⃣ Defesa Civil</li>
-        <li>5️⃣ CEM</li>
-        <li>6️⃣ Corpo de Bombeiros</li>
-        <li>7️⃣ Prefeitura</li>
-        <li>8️⃣ CETI</li>
+        <li>1️⃣ Reinauguração Aeroporto</li>
+        <li>2️⃣ Parada no Hospital (Gerador)</li>
+        <li>3️⃣ CETI - Entregas (ESTADO)</li>
+        <li>4️⃣ Reinauguração Casa Raimundo Domingos</li>
+        <li>5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)</li>
+        <li>6️⃣ Inauguração Defesa Civil</li>
+        <li>7️⃣ Inauguração Corpo de Bombeiros</li>
       </ol>
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
   <script>
     const pontos = [
-      { title: "1️⃣ Aeroporto Municipal", coords: [-7.282705, -64.772304] },
-      { title: "2️⃣ PAC-MOVEL Centro Dona Cesarina", coords: [-7.257511, -64.786804] },
-      { title: "3️⃣ CASA Raimundo Domingos", coords: [-7.261377, -64.792240] },
-      { title: "4️⃣ Defesa Civil", coords: [-7.262396, -64.799625] },
-      { title: "5️⃣ CEM", coords: [-7.261830, -64.800291] },
-      { title: "6️⃣ Corpo de Bombeiros", coords: [-7.262926, -64.796237] },
-      { title: "7️⃣ Prefeitura", coords: [-7.265565, -64.796221] },
-      { title: "8️⃣ CETI", coords: [-7.271356, -64.790865] }
+      { title: "1️⃣ Reinauguração Aeroporto", coords: [-7.282705, -64.772304] },
+      { title: "2️⃣ Parada no Hospital (Gerador)", coords: [-7.269101, -64.789807] },
+      { title: "3️⃣ CETI - Entregas (ESTADO)", coords: [-7.271356, -64.790865] },
+      { title: "4️⃣ Reinauguração Casa Raimundo Domingos", coords: [-7.261377, -64.792240] },
+      { title: "5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)", coords: [-7.257511, -64.786804] },
+      { title: "6️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
+      { title: "7️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
     ];
 
     const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
 
-    // Camada padrão (OpenStreetMap)
     const mapaBase = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
-    });
+    }).addTo(mapa);
 
-    // Camada satélite (Esri)
     const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics',
       maxZoom: 19
     });
 
-    // Adiciona mapa base por padrão
-    mapaBase.addTo(mapa);
-
-    // Opções de camada para o controle
     const camadasBase = {
       "🗺️ Mapa": mapaBase,
       "🛰️ Satélite": satelite
     };
 
-    // Adiciona o controle de camadas no canto superior direito
     L.control.layers(camadasBase).addTo(mapa);
 
-    const latlngs = [];
-
+    // Adiciona marcadores personalizados
     pontos.forEach((p, index) => {
       const numero = index + 1;
       const cor = numero === 1 ? 'red' : 'blue';
@@ -138,10 +130,20 @@
       });
 
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
-      latlngs.push(p.coords);
     });
 
-    L.polyline(latlngs, { color: '#007bff', weight: 4 }).addTo(mapa);
+    // Cria a rota usando Leaflet Routing Machine
+    L.Routing.control({
+      waypoints: pontos.map(p => L.latLng(p.coords[0], p.coords[1])),
+      lineOptions: {
+        styles: [{ color: '#007bff', weight: 4 }]
+      },
+      routeWhileDragging: false,
+      addWaypoints: false,
+      draggableWaypoints: false,
+      createMarker: function() { return null; } // impede marcadores duplicados
+    }).addTo(mapa);
+
   </script>
 </body>
 </html>
