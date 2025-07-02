@@ -132,7 +132,7 @@
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
     });
 
-    // Cria a rota usando Leaflet Routing Machine
+    // Cria a rota sem painel de instruções
     L.Routing.control({
       waypoints: pontos.map(p => L.latLng(p.coords[0], p.coords[1])),
       lineOptions: {
@@ -141,8 +141,8 @@
       routeWhileDragging: false,
       addWaypoints: false,
       draggableWaypoints: false,
-      createMarker: function() { return null; } // impede marcadores duplicados
-     show: false, //  oculta o painel de rotas!
+      createMarker: function() { return null; },
+      show: false // 👈 Remove painel de instruções
     }).addTo(mapa);
 
   </script>
