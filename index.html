@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Percurso - Visita Governador</title>
+  <title>Percurso - Visita Governador (Loop Lento)</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -34,7 +34,6 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(mapa);
 
-    // Adiciona os pinos numerados
     pontos.forEach((p, index) => {
       const iconNumerado = L.divIcon({
         html: `<div style="background-color:${index === 0 ? 'red' : 'blue'};color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid #fff;">${index + 1}</div>`,
@@ -45,7 +44,6 @@
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
     });
 
-    // Rota com animação
     const waypoints = pontos.map(p => L.latLng(p.coords[0], p.coords[1]));
 
     const rota = L.Routing.control({
@@ -56,27 +54,27 @@
       routeWhileDragging: false,
       addWaypoints: false,
       draggableWaypoints: false,
-      createMarker: function() { return null; },
+      createMarker: () => null,
       show: false
     }).addTo(mapa);
 
-    // Anima marcador ao longo da rota
     rota.on('routesfound', function(e) {
       const coords = e.routes[0].coordinates;
       const marcador = L.marker(coords[0]).addTo(mapa);
       let i = 0;
 
-      function animar() {
+      function animarLoop() {
+        marcador.setLatLng(coords[i]);
+        i++;
         if (i < coords.length) {
-          marcador.setLatLng(coords[i]);
-          i++;
-          setTimeout(animar, 50); // velocidade da animação
+          setTimeout(animarLoop, 150); // ← velocidade ajustada aqui
         } else {
-          marcador.bindPopup("Chegada: Corpo de Bombeiros").openPopup();
+          i = 0;
+          setTimeout(animarLoop, 1000); // pausa antes de reiniciar
         }
       }
 
-      animar();
+      animarLoop();
     });
   </script>
 </body>
