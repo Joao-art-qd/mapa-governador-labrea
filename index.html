@@ -1,33 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mapa - Percurso Governador</title>
+  <title>Percurso - Visita Governador</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    #map {
-      height: 100vh; /* Altura total da tela */
-      width: 100%;
-    }
-    body, html {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #map {
+      flex: 2;
+      height: 100%;
+    }
+
+    .lista {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 30px;
+      overflow-y: auto;
+      border-left: 4px solid #007bff;
+    }
+
+    .lista h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+
+    .lista ol {
+      font-size: 24px;
+      line-height: 1.6;
+      padding-left: 20px;
+    }
+
+    .lista li {
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      #map, .lista {
+        height: 50vh;
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="map"></div>
+  <div class="container">
+    <div id="map"></div>
+    <div class="lista">
+      <h2>Pontos da Visita</h2>
+      <ol>
+        <li>1️⃣ Aeroporto Municipal</li>
+        <li>2️⃣ Centro Dona Cesarina</li>
+        <li>3️⃣ CASA Raimundo Domingos</li>
+        <li>4️⃣ Defesa Civil</li>
+        <li>5️⃣ CEM</li>
+        <li>6️⃣ Corpo de Bombeiros</li>
+        <li>7️⃣ Prefeitura</li>
+        <li>8️⃣ CETI</li>
+      </ol>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    const iconPadrao = L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [0, -41]
-    });
-
     const pontos = [
       { title: "1️⃣ Aeroporto Municipal", coords: [-7.282705, -64.772304] },
       { title: "2️⃣ Centro Dona Cesarina", coords: [-7.257511, -64.786804] },
@@ -47,12 +104,21 @@
 
     const latlngs = [];
 
-    pontos.forEach(p => {
-      L.marker(p.coords, { icon: iconPadrao }).addTo(mapa).bindPopup(p.title);
+    pontos.forEach((p, index) => {
+      const numero = index + 1;
+      const cor = numero === 1 ? 'red' : 'blue';
+
+      const iconNumerado = L.divIcon({
+        html: `<div style="background-color:${cor};color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid #fff;">${numero}</div>`,
+        iconSize: [30, 30],
+        className: ''
+      });
+
+      L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
       latlngs.push(p.coords);
     });
 
-    L.polyline(latlngs, { color: 'blue' }).addTo(mapa);
+    L.polyline(latlngs, { color: '#007bff', weight: 4 }).addTo(mapa);
   </script>
 </body>
 </html>
