@@ -81,8 +81,8 @@
         <li>3️⃣ CETI - Entregas (ESTADO)</li>
         <li>4️⃣ Reinauguração Casa Raimundo Domingos</li>
         <li>5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)</li>
-        <li>6️⃣ Inauguração Defesa Civil</li>
-        <li>7️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA</li>
+        <li>6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA</li>
+        <li>7️⃣ Inauguração Defesa Civil</li>
         <li>8️⃣ Inauguração Corpo de Bombeiros</li>
       </ol>
     </div>
@@ -97,8 +97,8 @@
       { title: "3️⃣ CETI - Entregas (ESTADO)", coords: [-7.271356, -64.790865] },
       { title: "4️⃣ Reinauguração Casa Raimundo Domingos", coords: [-7.261377, -64.792240] },
       { title: "5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)", coords: [-7.257511, -64.786804] },
-      { title: "6️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
-      { title: "7️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA", coords: [-7.261830, -64.800291] },
+      { title: "6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA", coords: [-7.261830, -64.800291] },
+      { title: "7️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
       { title: "8️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
     ];
 
@@ -133,15 +133,18 @@
       L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
     });
 
+    const waypoints = pontos.map(p => L.latLng(p.coords[0], p.coords[1]));
+    console.log("Coordenadas dos pontos da rota:", waypoints);
+
     L.Routing.control({
-      waypoints: pontos.map(p => L.latLng(p.coords[0], p.coords[1])),
+      waypoints: waypoints,
       lineOptions: {
         styles: [{ color: 'red', weight: 4 }]
       },
       routeWhileDragging: false,
       addWaypoints: false,
       draggableWaypoints: false,
-      createMarker: function() { return null; },
+      createMarker: function () { return null; },
       show: false
     }).addTo(mapa);
   </script>
