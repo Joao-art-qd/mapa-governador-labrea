@@ -63,6 +63,10 @@
         width: 100%;
       }
     }
+
+    .leaflet-control-layers {
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -98,9 +102,28 @@
 
     const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Camada padrão (OpenStreetMap)
+    const mapaBase = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(mapa);
+    });
+
+    // Camada satélite (Esri)
+    const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics',
+      maxZoom: 19
+    });
+
+    // Adiciona mapa base por padrão
+    mapaBase.addTo(mapa);
+
+    // Opções de camada para o controle
+    const camadasBase = {
+      "🗺️ Mapa": mapaBase,
+      "🛰️ Satélite": satelite
+    };
+
+    // Adiciona o controle de camadas no canto superior direito
+    L.control.layers(camadasBase).addTo(mapa);
 
     const latlngs = [];
 
