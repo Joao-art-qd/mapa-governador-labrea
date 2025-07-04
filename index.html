@@ -1,135 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Percurso - Visita Governador</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>INSCRIÇÃO EDD 2025</title>
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
-    body, html {
-      width: 100%;
-      height: 100%;
+    body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-
-    .container {
-      display: flex;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    #map {
-      flex: 2;
-      height: 100%;
-    }
-
-    .lista {
-      flex: 1;
-      background-color: #ffffff;
-      padding: 30px;
-      overflow-y: auto;
-      border-left: 4px solid #007bff;
-    }
-
-    .lista h2 {
-      font-size: 32px;
-      margin-bottom: 20px;
-      color: #007bff;
-    }
-
-    .lista ol {
-      font-size: 24px;
       line-height: 1.6;
-      padding-left: 20px;
     }
 
-    .lista li {
-      margin-bottom: 15px;
+    nav {
+      background-color: #111;
+      padding: 10px 20px;
     }
 
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      #map, .lista {
-        height: 50vh;
-        width: 100%;
-      }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .leaflet-control-layers {
-      font-size: 14px;
+    nav ul li {
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background-color: #003366;
+      color: white;
+      padding: 100px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .btn-main {
+      display: inline-block;
+      background-color: #003366;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    footer {
+      background-color: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, select {
+      padding: 10px;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="map"></div>
-    <div class="lista">
-      <h2>Pontos da Visita</h2>
-      <ol>
-        <li>1️⃣ Reinauguração Aeroporto</li>
-        <li>2️⃣ Parada no Hospital (Gerador)</li>
-        <li>3️⃣ CETI - Entregas (ESTADO)</li>
-        <li>4️⃣ Reinauguração Casa Raimundo Domingos</li>
-        <li>5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)</li>
-        <li>6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA</li>
-        <li>7️⃣ Inauguração Defesa Civil</li>
-        <li>8️⃣ Inauguração Corpo de Bombeiros</li>
-      </ol>
-    </div>
+  <nav>
+    <ul>
+      <li><a href="#inscricao">Inscrição</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <h1>ENCONTRO DE DISCIPULADORES COM DEUS 2025</h1>
+    <p>📅 01, 02 e 03 de agosto – Sítio da Paz Church – Lábrea/AM</p>
   </div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    const pontos = [
-      { title: "1️⃣ Reinauguração Aeroporto", coords: [-7.282705, -64.772304] },
-      { title: "2️⃣ Parada no Hospital (Gerador)", coords: [-7.269101, -64.789807] },
-      { title: "3️⃣ CETI - Entregas (ESTADO)", coords: [-7.271356, -64.790865] },
-      { title: "4️⃣ Reinauguração Casa Raimundo Domingos", coords: [-7.261377, -64.792240] },
-      { title: "5️⃣ Entrega PAC Móvel (Centro Dona Cesarina)", coords: [-7.257511, -64.786804] },
-      { title: "6️⃣ CEM - CENTRO DE ESPECIALIDADE MÉDICA", coords: [-7.261830, -64.800291] },
-      { title: "7️⃣ Inauguração Defesa Civil", coords: [-7.262396, -64.799625] },
-      { title: "8️⃣ Inauguração Corpo de Bombeiros", coords: [-7.262926, -64.796237] }
-    ];
+  <section id="inscricao">
+    <h2 class="section-title">Formulário de Inscrição</h2>
+    <form action="confirmacao.html" method="get">
+      <input type="text" name="nome" placeholder="Nome completo" required>
+      <input type="email" name="email" placeholder="E-mail" required>
+      <input type="tel" name="telefone" placeholder="Telefone (com DDD)" required>
+      <select name="faixa_etaria" required>
+        <option value="">Faixa Etária</option>
+        <option value="12-17">12 a 17 anos</option>
+        <option value="18-30">18 a 30 anos</option>
+        <option value="31-50">31 a 50 anos</option>
+        <option value="51+">51 anos ou mais</option>
+      </select>
+      <button type="submit" class="btn-main">Enviar Inscrição</button>
+    </form>
+  </section>
 
-    const mapa = L.map('map').setView([-7.2620, -64.7930], 15);
-
-    const mapaBase = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(mapa);
-
-    const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics',
-      maxZoom: 19
-    });
-
-    const camadasBase = {
-      "🗺️ Mapa": mapaBase,
-      "🛰️ Satélite": satelite
-    };
-
-    L.control.layers(camadasBase).addTo(mapa);
-
-    pontos.forEach((p, index) => {
-      const numero = index + 1;
-      const cor = numero === 1 ? 'red' : 'blue';
-
-      const iconNumerado = L.divIcon({
-        html: `<div style="background-color:${cor};color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid #fff;">${numero}</div>`,
-        iconSize: [30, 30],
-        className: ''
-      });
-
-      L.marker(p.coords, { icon: iconNumerado }).addTo(mapa).bindPopup(p.title);
-    });
-  </script>
+  <footer>
+    © 2025 Organização do Evento. Todos os direitos reservados.
+  </footer>
 </body>
 </html>
