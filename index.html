@@ -39,10 +39,26 @@
     }
 
     .hero {
-      background-color: #003366;
+      background-image: url('bg-aguia.jpg');
+      background-size: cover;
+      background-position: center;
       color: white;
       padding: 100px 20px;
       text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 51, 0.7); /* overlay azul escuro */
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -90,6 +106,12 @@
       padding: 10px;
       font-size: 1rem;
     }
+
+    .countdown {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -100,8 +122,11 @@
   </nav>
 
   <div class="hero">
-    <h1>ENCONTRO DE DISCIPULADORES COM DEUS 2025</h1>
-    <p>📅 01, 02 e 03 de agosto – Sítio da Paz Church – Lábrea/AM</p>
+    <div class="hero-content">
+      <h1>ENCONTRO DE DISCIPULADORES COM DEUS 2025</h1>
+      <p>📅 01, 02 e 03 de agosto – Sítio da Paz Church – Lábrea/AM</p>
+      <div class="countdown" id="contador"></div>
+    </div>
   </div>
 
   <section id="inscricao">
@@ -124,5 +149,28 @@
   <footer>
     © 2025 Organização do Evento. Todos os direitos reservados.
   </footer>
+
+  <script>
+    // Contador regressivo até 01/08/2025
+    const destino = new Date("2025-08-01T00:00:00").getTime();
+
+    const intervalo = setInterval(() => {
+      const agora = new Date().getTime();
+      const distancia = destino - agora;
+
+      const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+      document.getElementById("contador").innerHTML = 
+        `⏳ Faltam ${dias}d ${horas}h ${minutos}m ${segundos}s`;
+
+      if (distancia < 0) {
+        clearInterval(intervalo);
+        document.getElementById("contador").innerHTML = "🚀 O evento já começou!";
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
